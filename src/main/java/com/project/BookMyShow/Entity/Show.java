@@ -3,6 +3,8 @@ package com.project.BookMyShow.Entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,10 +32,12 @@ public class Show {
     @Column(name = "show_id")
     private Long showId;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "theatre_id", nullable = false)
     private Theatre theatre;
@@ -44,6 +48,7 @@ public class Show {
     @Column(name = "price", nullable = false)
     private Double price;
     
+    @JsonIgnore
     @OneToMany(mappedBy = "show")
     private List<Booking> bookings;
 }

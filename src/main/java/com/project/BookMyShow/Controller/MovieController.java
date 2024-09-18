@@ -1,7 +1,7 @@
 package com.project.BookMyShow.Controller;
 
 import java.util.List;
-
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.BookMyShow.Entity.Movie;
+import com.project.BookMyShow.Entity.Show;
 import com.project.BookMyShow.Service.MovieService;
 
 @RestController
@@ -29,6 +30,16 @@ public class MovieController {
 	public ResponseEntity<List<Movie>> getAllMoviesFromCity(@PathVariable("city") Long city){
 		List<Movie> movies = movieService.getAllMovies(city);
 		return ResponseEntity.status(HttpStatus.OK).body(movies);
+	}
+	
+	@GetMapping("/buytickets/{movie}-{city}")
+	public ResponseEntity<Map<String,List<Show>>> getAllShowsFromCityAndMovie(
+			@PathVariable("city") Long city,
+			@PathVariable("movie") Long movie){
+				
+		Map<String,List<Show>> shows = movieService.getAllShows(city,movie);
+		return ResponseEntity.status(HttpStatus.OK).body(shows);//<>(shows,HttpStatus.OK);
+	
 	}
 
 }
