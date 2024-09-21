@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.BookMyShow.Entity.Movie;
+import com.project.BookMyShow.Entity.Seat;
 import com.project.BookMyShow.Entity.Show;
 import com.project.BookMyShow.Service.MovieService;
 
@@ -26,11 +27,13 @@ public class MovieController {
 		this.movieService = movieService;		
 	}
 	
+	
 	@GetMapping("/home/Movies-{city}")
 	public ResponseEntity<List<Movie>> getAllMoviesFromCity(@PathVariable("city") Long city){
 		List<Movie> movies = movieService.getAllMovies(city);
 		return ResponseEntity.status(HttpStatus.OK).body(movies);
 	}
+	
 	
 	@GetMapping("/buytickets/{movie}-{city}")
 	public ResponseEntity<Map<String,List<Show>>> getAllShowsFromCityAndMovie(
@@ -40,6 +43,16 @@ public class MovieController {
 		Map<String,List<Show>> shows = movieService.getAllShows(city,movie);
 		return ResponseEntity.status(HttpStatus.OK).body(shows);//<>(shows,HttpStatus.OK);
 	
+		
 	}
+	
+	
+	@GetMapping("allSeats/{showId}")
+	public List<Seat> getSeatsfromShow(@PathVariable("showId") Long showId){
+		List<Seat> seats = movieService.getAllseats(showId);
+		return seats;
+		
+	}
+	
 
 }

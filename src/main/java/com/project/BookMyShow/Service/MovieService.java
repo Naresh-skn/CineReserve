@@ -10,7 +10,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.project.BookMyShow.Entity.Movie;
+import com.project.BookMyShow.Entity.Seat;
 import com.project.BookMyShow.Entity.Show;
+import com.project.BookMyShow.Repository.SeatRepository;
 import com.project.BookMyShow.Repository.ShowRepository;
 import com.project.BookMyShow.Repository.TheatreRepository;
 import com.project.BookMyShow.exception.GenException;
@@ -21,10 +23,14 @@ public class MovieService {
 	
 	private TheatreRepository theatreRepository;
 	private ShowRepository showRepository;
+	private SeatRepository seatRepository;
 
-	public MovieService(TheatreRepository theatreRepository, ShowRepository showRepository) {
+	public MovieService( TheatreRepository theatreRepository, 
+			ShowRepository showRepository,
+			SeatRepository seatRepository){
 		this.theatreRepository = theatreRepository;
 		this.showRepository = showRepository;
+		this.seatRepository = seatRepository;
 	}
 	
 	public List<Movie> getAllMovies(Long city) {
@@ -64,6 +70,14 @@ public class MovieService {
 			
 		}
 		return map;
+	}
+
+	public List<Seat> getAllseats(Long showId) {
+		Optional<List<Seat>> seats = seatRepository.findByShowId(showId);
+		if(seats.get().size()==0)
+			throw new GenException("No Seats found");
+		return seats.get();		
+		
 	}
 	
 	

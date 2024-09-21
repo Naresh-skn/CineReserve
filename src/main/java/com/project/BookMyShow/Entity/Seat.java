@@ -7,6 +7,9 @@ import lombok.Builder;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 @Entity
 @Table(name = "seats")
 @Data
@@ -20,6 +23,7 @@ public class Seat {
     @Column(name = "seat_id")
     private Long seatId;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "theatre_id", nullable = false)
     private Theatre theatre;
@@ -33,6 +37,7 @@ public class Seat {
     @Column(name = "locked_until")
     private LocalDateTime lockedUntil;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "show_id", nullable = false)
     private Show show;

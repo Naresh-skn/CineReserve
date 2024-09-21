@@ -31,6 +31,8 @@ public class Theatre {
     @Column(name = "theatre_id")
     private Long theatreId;
 
+    
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "city_id", nullable = false)
     private City city;
