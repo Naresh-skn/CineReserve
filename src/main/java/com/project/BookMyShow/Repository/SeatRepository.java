@@ -20,5 +20,8 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
 	 @Lock(LockModeType.PESSIMISTIC_WRITE)
 	 @Query("SELECT s FROM Seat s WHERE s.id IN :seatIds AND (s.lockedUntil IS NULL OR s.lockedUntil < CURRENT_TIMESTAMP) AND s.isBooked = false")
 	 List<Seat> findAvailableSeatsWithLock(List<Long> seatIds);
+	 
+	 @Query("SELECT s FROM Seat s WHERE s.id IN :seatIds AND (s.lockedUntil IS NOT NULL OR s.lockedUntil < CURRENT_TIMESTAMP) AND s.isBooked = false")
+	 List<Seat> findAvailableSeats(List<Long> seatIds);
 
 }

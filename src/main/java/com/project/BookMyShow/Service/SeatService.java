@@ -37,29 +37,37 @@ public class SeatService {
         }
         seatRepository.saveAll(seats);  // Save locked seats
         
-        try {
-            // Proceed with payment
-          Thread.sleep(120000);
-
-            // Confirm the booking for all seats
-			for (Seat seat : seats) {
-			    seat.setIsBooked(true);
-			    seat.setLockedUntil(null);  // Clear the lock
-			}
-			seatRepository.saveAll(seats);
-        } finally {
-            // If payment failed or any exception occurred, release all locks after the timeout automatically
-            if (!seats.stream().allMatch(Seat::getIsBooked)) {
-                for (Seat seat : seats) {
-                	seat.setIsBooked(false);
-                	seat.setLockedUntil(null);
-                }
-                }
-                seatRepository.saveAll(seats);
-            }
+      
 		return "Tset";
 
 		
+	}
+	
+	
+	@Transactional
+	public String payment(List<Long> seatIds) {
+	
+		List<Seat> seats = seatRepository.findAvailableSeats(seatIds);
+		  try {
+	            // Proceed with payment
+	      
+	            // Confirm the booking for all seats
+				for (Seat seat : seats) {
+				    seat.setIsBooked(true);
+				    seat.setLockedUntil(null);  // Clear the lock
+				}
+				
+	        } finally {
+	            // If payment failed or any exception occurred, release all locks after the timeout automatically
+	            if (!seats.stream().allMatch(Seat::getIsBooked)) {
+	                for (Seat seat : seats) {
+	                	seat.setIsBooked(false);
+	                	seat.setLockedUntil(null);
+	                }
+	                }
+	                seatRepository.saveAll(seats);
+	            }
+		return "Success";
 	}
 
 }
