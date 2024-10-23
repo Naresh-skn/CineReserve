@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.project.BookMyShow.Entity.Movie;
 import com.project.BookMyShow.Entity.Seat;
 import com.project.BookMyShow.Entity.Show;
+import com.project.BookMyShow.Repository.MovieRepository;
 import com.project.BookMyShow.Repository.SeatRepository;
 import com.project.BookMyShow.Repository.ShowRepository;
 import com.project.BookMyShow.Repository.TheatreRepository;
@@ -24,15 +25,18 @@ public class MovieService {
 	private TheatreRepository theatreRepository;
 	private ShowRepository showRepository;
 	private SeatRepository seatRepository;
+	private MovieRepository movieRepository;
 
-	public MovieService( TheatreRepository theatreRepository, 
-			ShowRepository showRepository,
-			SeatRepository seatRepository){
+
+	public MovieService(TheatreRepository theatreRepository, ShowRepository showRepository,
+			SeatRepository seatRepository, MovieRepository movieRepository) {
 		this.theatreRepository = theatreRepository;
 		this.showRepository = showRepository;
 		this.seatRepository = seatRepository;
+		this.movieRepository = movieRepository;
 	}
-	
+
+
 	public List<Movie> getAllMovies(Long city) {
 		Optional<List<Long>> theatres = theatreRepository.findByCityId(city);
 		if(theatres.get().size()==0)
@@ -77,6 +81,16 @@ public class MovieService {
 		if(seats.get().size()==0)
 			throw new GenException("No Seats found");
 		return seats.get();		
+		
+	}
+
+	public Movie addNewMovie(Movie movie) {
+		Movie movieFromDb = movieRepository.findByTitle(movie.getTitle());
+		if(movieFromDb!=null) {
+			throw new GenException("Movie Already Exists");
+		}
+		Movie savedMovie = movieRepository.save(movie);
+		return savedMovie;
 		
 	}
 	

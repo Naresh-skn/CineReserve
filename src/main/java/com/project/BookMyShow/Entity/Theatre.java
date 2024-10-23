@@ -42,7 +42,7 @@ public class Theatre {
 
     @Column(name = "address", nullable = false)
     private String address;
-    
+ 
     @JsonIgnore
     @OneToMany(mappedBy = "theatre")
     private List<Show> shows; 

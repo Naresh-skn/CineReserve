@@ -36,6 +36,7 @@ public class SeatService {
             seat.setLockedUntil(lockExpirationTime);
         }
         seatRepository.saveAll(seats);  // Save locked seats
+        Thread.sleep(60000);
         
       
 		return "Tset";
