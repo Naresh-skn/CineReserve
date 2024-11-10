@@ -5,20 +5,21 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.BookMyShow.DTO.ShowDTO;
+import com.project.BookMyShow.DTO.TheatreDTO;
 import com.project.BookMyShow.Entity.Movie;
 import com.project.BookMyShow.Entity.Seat;
 import com.project.BookMyShow.Entity.Show;
+import com.project.BookMyShow.Entity.Theatre;
 import com.project.BookMyShow.Service.MovieService;
 
 import jakarta.validation.Valid;
@@ -68,6 +69,23 @@ public class MovieController {
 		Movie savedMovie = movieService.addNewMovie(movie);
 		return ResponseEntity.status(HttpStatus.CREATED).body(savedMovie);
 	}
+	
+	@PostMapping("admin/theatre")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<Theatre> createNewTheatre(@Valid @RequestBody TheatreDTO theatredto) {
+		Theatre savedTheatre= movieService.createTheatre(theatredto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(savedTheatre);
+	}
+	
+	@PostMapping("admin/show")
+	public ResponseEntity<Show> createNewShow(@Valid @RequestBody ShowDTO showDTO) {
+		Show savedshow= movieService.createShow(showDTO);
+		return ResponseEntity.status(HttpStatus.CREATED).body(savedshow);
+	}
+	
+	
+	
+	
 	
 
 }

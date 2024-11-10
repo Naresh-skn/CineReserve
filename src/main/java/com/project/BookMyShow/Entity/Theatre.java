@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "theatres")
@@ -30,11 +31,15 @@ public class Theatre {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "theatre_id")
     private Long theatreId;
-
     
+    
+    @Column(name="capacity")
+    private Integer capacity;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "city_id", nullable = false)
+    @ToString.Exclude
     private City city;
 
     @Column(name = "name", nullable = false)
@@ -45,5 +50,6 @@ public class Theatre {
  
     @JsonIgnore
     @OneToMany(mappedBy = "theatre")
+    @ToString.Exclude
     private List<Show> shows; 
 }

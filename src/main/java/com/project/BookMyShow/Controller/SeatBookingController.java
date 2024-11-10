@@ -29,10 +29,8 @@ public class SeatBookingController {
 	
 	@PostMapping("/seats/payment")
 	public String payment(@RequestBody List<Long> seats) throws InterruptedException{
-		
 		String msg = seatService.payment(seats);
 		return msg;
-		
 	}
 	
 	

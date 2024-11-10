@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "shows")
@@ -35,11 +36,13 @@ public class Show {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "movie_id", nullable = false)
+    @ToString.Exclude
     private Movie movie;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "theatre_id", nullable = false)
+    @ToString.Exclude
     private Theatre theatre;
 
     @Column(name = "show_time", nullable = false)
@@ -50,5 +53,6 @@ public class Show {
     
     @JsonIgnore
     @OneToMany(mappedBy = "show")
+    @ToString.Exclude
     private List<Booking> bookings;
 }

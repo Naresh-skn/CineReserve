@@ -15,4 +15,6 @@ public interface TheatreRepository extends JpaRepository<Theatre, Long> {
 	@Query("select t.theatreId from Theatre t where t.city.cityId = :cityId")
 	Optional<List<Long>> findByCityId(@Param("cityId")Long cityId);
 
+	Theatre findByName(String name);
+
 }

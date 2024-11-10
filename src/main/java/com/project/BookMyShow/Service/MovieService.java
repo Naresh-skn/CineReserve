@@ -7,16 +7,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.project.BookMyShow.DTO.ShowDTO;
+import com.project.BookMyShow.DTO.TheatreDTO;
+import com.project.BookMyShow.Entity.City;
 import com.project.BookMyShow.Entity.Movie;
 import com.project.BookMyShow.Entity.Seat;
 import com.project.BookMyShow.Entity.Show;
+import com.project.BookMyShow.Entity.Theatre;
+import com.project.BookMyShow.Repository.CityRepository;
 import com.project.BookMyShow.Repository.MovieRepository;
 import com.project.BookMyShow.Repository.SeatRepository;
 import com.project.BookMyShow.Repository.ShowRepository;
 import com.project.BookMyShow.Repository.TheatreRepository;
 import com.project.BookMyShow.exception.GenException;
+
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 @Service
 public class MovieService {
@@ -26,6 +35,9 @@ public class MovieService {
 	private ShowRepository showRepository;
 	private SeatRepository seatRepository;
 	private MovieRepository movieRepository;
+	
+	@Autowired
+	private CityRepository cityRepository;
 
 
 	public MovieService(TheatreRepository theatreRepository, ShowRepository showRepository,
@@ -92,6 +104,62 @@ public class MovieService {
 		Movie savedMovie = movieRepository.save(movie);
 		return savedMovie;
 		
+	}
+
+
+	public Theatre createTheatre(@Valid TheatreDTO theatredto) {
+		
+		Optional<City> city = cityRepository.findById(theatredto.getCity());
+		
+		Theatre theatre = Theatre.builder()
+				.capacity(theatredto.getCapacity())
+				.name(theatredto.getName())
+				.address(theatredto.getAddress())
+				.city(city.get())
+				.build();
+		
+		Theatre theatreFromDb = theatreRepository.findByName(theatre.getName());
+		if(theatreFromDb!=null) {
+			throw new GenException("Threatre Already Exists");
+		}
+		Theatre savedTheatre= theatreRepository.save(theatre);
+		return savedTheatre;
+	}
+
+
+	public List<Theatre> getthea() {
+		// TODO Auto-generated method stub
+		return theatreRepository.findAll();
+	}
+
+
+	@Transactional
+	public Show createShow(@Valid ShowDTO showDTO) {
+Optional<Theatre> theatre = theatreRepository.findById(showDTO.getTheatreId());
+	
+Optional<Movie> movie = movieRepository.findById(showDTO.getMovieId());
+		
+		Show show= Show.builder()
+				.movie(movie.get())
+				.price(showDTO.getPrice())
+				.theatre(theatre.get())
+				.showTime(showDTO.getShowTime())
+				.build();
+		List<Seat> seats = new ArrayList<>();
+		for(int i=0;i<theatre.get().getCapacity();i++) {
+			Seat seat = Seat.builder()
+					.theatre(theatre.get())
+					.seatNumber("s"+i)
+					.show(show)
+					.isBooked(false)
+					.build();
+			seats.add(seat);
+			
+		}
+		Show Savedshow= showRepository.save(show);		
+		List<Seat> savedseats = seatRepository.saveAll(seats);
+		System.out.println(savedseats);
+		return Savedshow;
 	}
 	
 	
