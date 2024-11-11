@@ -51,7 +51,7 @@ public class MovieService {
 
 	public List<Movie> getAllMovies(Long city) {
 		Optional<List<Long>> theatres = theatreRepository.findByCityId(city);
-		if(theatres.get().size()==0)
+		if(theatres.isEmpty())
 			throw new GenException("No Theatres found in your City");
 		List<Long> theatreList = theatres.get();	
 		Optional<List<Movie>> movies = showRepository.findByTheatreIds(theatreList);
@@ -63,7 +63,7 @@ public class MovieService {
 
 	public Map<String,List<Show>> getAllShows(Long city, Long movie) {
 		Optional<List<Long>> theatres = theatreRepository.findByCityId(city);
-		if(theatres.get().size()==0)
+		if(theatres.get().isEmpty())
 			throw new GenException("No Theatres found in your City");
 		List<Long> theatreList = theatres.get();
 		
@@ -151,7 +151,7 @@ Optional<Movie> movie = movieRepository.findById(showDTO.getMovieId());
 					.theatre(theatre.get())
 					.seatNumber("s"+i)
 					.show(show)
-					.isBooked(false)
+					.isBooked(Boolean.FALSE)
 					.build();
 			seats.add(seat);
 			
