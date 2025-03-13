@@ -31,10 +31,10 @@ import jakarta.validation.Valid;
 public class MovieService {
 
 	
-	private TheatreRepository theatreRepository;
-	private ShowRepository showRepository;
-	private SeatRepository seatRepository;
-	private MovieRepository movieRepository;
+	private final TheatreRepository theatreRepository;
+	private final ShowRepository showRepository;
+	private final SeatRepository seatRepository;
+	private final MovieRepository movieRepository;
 	
 	@Autowired
 	private CityRepository cityRepository;
@@ -49,8 +49,8 @@ public class MovieService {
 	}
 
 
-	public List<Movie> getAllMovies(Long city) {
-		Optional<List<Long>> theatres = theatreRepository.findByCityId(city);
+	public List<Movie> getAllMovies(Long cityId) {
+		Optional<List<Long>> theatres = theatreRepository.findByCityId(cityId);
 		if(theatres.isEmpty())
 			throw new GenException("No Theatres found in your City");
 		List<Long> theatreList = theatres.get();	
@@ -75,7 +75,7 @@ public class MovieService {
 		Map<String,List<Show>> map = new HashMap<>();
 		
 		for(Show eachShow: showList) {
-			String threatreName = eachShow.getTheatre().getName();
+			String threatreName = eachShow.getTheatre().getTheatreName();
 			if(map.containsKey(threatreName)) {
 				List<Show> show = map.get(threatreName);
 				show.add(eachShow);
@@ -101,29 +101,14 @@ public class MovieService {
 		if(movieFromDb!=null) {
 			throw new GenException("Movie Already Exists");
 		}
-		Movie savedMovie = movieRepository.save(movie);
-		return savedMovie;
+        return movieRepository.save(movie);
 		
 	}
 
 
 	public Theatre createTheatre(@Valid TheatreDTO theatredto) {
 		
-		Optional<City> city = cityRepository.findById(theatredto.getCity());
-		
-		Theatre theatre = Theatre.builder()
-				.capacity(theatredto.getCapacity())
-				.name(theatredto.getName())
-				.address(theatredto.getAddress())
-				.city(city.get())
-				.build();
-		
-		Theatre theatreFromDb = theatreRepository.findByName(theatre.getName());
-		if(theatreFromDb!=null) {
-			throw new GenException("Threatre Already Exists");
-		}
-		Theatre savedTheatre= theatreRepository.save(theatre);
-		return savedTheatre;
+		return null;
 	}
 
 

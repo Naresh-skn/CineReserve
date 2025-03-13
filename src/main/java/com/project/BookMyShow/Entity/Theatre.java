@@ -36,20 +36,20 @@ public class Theatre {
     @Column(name="capacity")
     private Integer capacity;
 
+    @Column(name = "name", nullable = false)
+    private String theatreName;
+
+    @Column(name = "address", nullable = false)
+    private String address;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "city_id", nullable = false)
     @ToString.Exclude
     private City city;
-
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "address", nullable = false)
-    private String address;
  
     @JsonIgnore
     @OneToMany(mappedBy = "theatre")
     @ToString.Exclude
-    private List<Show> shows; 
+    private List<Show> shows;
 }

@@ -2,6 +2,7 @@ package com.project.BookMyShow.Controller;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,7 @@ import com.project.BookMyShow.Service.SeatService;
 @RequestMapping("/api")
 public class SeatBookingController {
 	
-	private SeatService seatService;
+	private final SeatService seatService;
 
 	public SeatBookingController(SeatService seatService) {
 		this.seatService = seatService;
@@ -21,16 +22,14 @@ public class SeatBookingController {
 	
 	@PostMapping("/seats")
 	public String bookSeats(@RequestBody List<Long> seats) throws InterruptedException{
-		
-		String msg = seatService.bookMovieSeats(seats);
-		return msg;
+
+        return seatService.bookMovieSeats(seats);
 		
 	}
 	
 	@PostMapping("/seats/payment")
 	public String payment(@RequestBody List<Long> seats) throws InterruptedException{
-		String msg = seatService.payment(seats);
-		return msg;
+        return seatService.payment(seats);
 	}
 	
 	

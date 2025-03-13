@@ -1,6 +1,7 @@
 package com.project.BookMyShow.Entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -55,5 +56,5 @@ public class Movie {
     
     @JsonIgnore
     @OneToMany(mappedBy = "movie")
-    private List<Show> shows;
+    private List<Show> shows = new ArrayList<>();
 }

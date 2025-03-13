@@ -1,0 +1,25 @@
+@startuml
+class com.project.BookMyShow.Service.MovieService {
+- TheatreRepository theatreRepository
+- ShowRepository showRepository
+- SeatRepository seatRepository
+- MovieRepository movieRepository
+- CityRepository cityRepository
++ List<Movie> getAllMovies(Long)
++ Map<String,List<Show>> getAllShows(Long,Long)
++ List<Seat> getAllseats(Long)
++ Movie addNewMovie(Movie)
++ Theatre createTheatre(TheatreDTO)
++ List<Theatre> getthea()
++ Show createShow(ShowDTO)
+}
+
+
+class com.project.BookMyShow.Service.SeatService {
+- SeatRepository seatRepository
++ String bookMovieSeats(List<Long>)
++ String payment(List<Long>)
+}
+
+
+@enduml

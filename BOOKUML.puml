@@ -1,0 +1,80 @@
+@startuml
+class Seat {
+- Long seatId
+- Theatre theatre
+- String seatNumber
+- Boolean isBooked
+- LocalDateTime lockedUntil
+- Show show
+}
+
+class Show {
+- Long showId
+- Movie movie
+- Theatre theatre
+- LocalDateTime showTime
+- Double price
+- List<Booking> bookings
+}
+
+class City {
+- Long cityId
+- String cityName
+- String state
+- String country
+- List<Theatre> theatres
+}
+
+class Movie {
+- Long movieId
+- String title
+- String genre
+- int duration
+- String language
+- Double rating
+- String description
+- LocalDate releaseDate
+- List<Show> shows
+}
+
+class Address {
+- Long addressId
+- String street
+- String buildingName
+- String city
+- String state
+- String country
+- String pincode
+}
+
+class User {
+- Long userId
+- String name
+- String email
+- String phoneNumber
+- LocalDateTime createdAt
+- LocalDateTime updatedAt
+- List<Booking> bookings
+}
+
+class Booking {
+- Long bookingId
+- User user
+- Show show
+- LocalDateTime bookingTime
+- Double totalPrice
+- String status
+}
+
+class Theatre {
+- Long theatreId
+- Integer capacity
+- City city
+- String name
+- String address
+- List<Show> shows
+}
+
+Theatre --> Seat
+
+@enduml

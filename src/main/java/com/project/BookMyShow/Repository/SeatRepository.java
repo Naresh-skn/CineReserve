@@ -13,7 +13,7 @@ import jakarta.persistence.LockModeType;
 
 
 public interface SeatRepository extends JpaRepository<Seat, Long> {
-	//@Query("SELECT s FROM Seat s WHERE s.booked = false AND (s.lockedUntil IS NULL OR s.lockedUntil < :now)")
+
 	@Query("SELECT s FROM Seat s WHERE s.show.showId =:showId and s.isBooked = false AND (s.lockedUntil IS NULL OR s.lockedUntil < CURRENT_TIMESTAMP)")
 	Optional<List<Seat>> findByShowId(Long showId);
 	

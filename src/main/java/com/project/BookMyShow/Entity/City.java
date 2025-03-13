@@ -1,5 +1,6 @@
 package com.project.BookMyShow.Entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -35,8 +36,7 @@ public class City {
 
     @Column(name = "country", nullable = false)
     private String country;
-    
-
-    @OneToMany(mappedBy = "city")
-    private List<Theatre> theatres;
+//
+//    @OneToMany(mappedBy = "city")
+//    private List<Theatre> theatres=new ArrayList<>();
 }

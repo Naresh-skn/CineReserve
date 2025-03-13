@@ -28,7 +28,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/api")
 public class MovieController {
 	
-	private MovieService movieService;
+	private final MovieService movieService;
 	
 	@Autowired
 	public MovieController(MovieService movieService) {
@@ -36,22 +36,19 @@ public class MovieController {
 	}
 	
 	
-	@GetMapping("/home/Movies-{city}")
-	public ResponseEntity<List<Movie>> getAllMoviesFromCity(@PathVariable("city") Long city){
-		List<Movie> movies = movieService.getAllMovies(city);
+	@GetMapping("/home/Movies/{cityId}")
+	public ResponseEntity<List<Movie>> getAllMoviesFromCity(@PathVariable("cityId") Long cityId){
+		List<Movie> movies = movieService.getAllMovies(cityId);
 		return ResponseEntity.status(HttpStatus.OK).body(movies);
 	}
 	
 	
-	@GetMapping("/buytickets/{movie}-{city}")
+	@GetMapping("/shows/{movieId}/{cityId}")
 	public ResponseEntity<Map<String,List<Show>>> getAllShowsFromCityAndMovie(
-			@PathVariable("city") Long city,
-			@PathVariable("movie") Long movie){
-				
-		Map<String,List<Show>> shows = movieService.getAllShows(city,movie);
+			@PathVariable("cityId") Long cityId,
+			@PathVariable("movieId") Long movieId){
+		Map<String,List<Show>> shows = movieService.getAllShows(cityId,movieId);
 		return ResponseEntity.status(HttpStatus.OK).body(shows);//<>(shows,HttpStatus.OK);
-	
-		
 	}
 	
 	
@@ -70,22 +67,17 @@ public class MovieController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(savedMovie);
 	}
 	
-	@PostMapping("admin/theatre")
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<Theatre> createNewTheatre(@Valid @RequestBody TheatreDTO theatredto) {
-		Theatre savedTheatre= movieService.createTheatre(theatredto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(savedTheatre);
-	}
+//	@PostMapping("test/admin/theatre")
+//	@PreAuthorize("hasRole('ADMIN')")
+//	public ResponseEntity<Theatre> createNewTheatre(@Valid @RequestBody TheatreDTO theatredto) {
+//		Theatre savedTheatre= movieService.createTheatre(theatredto);
+//		return ResponseEntity.status(HttpStatus.CREATED).body(savedTheatre);
+//	}
 	
 	@PostMapping("admin/show")
 	public ResponseEntity<Show> createNewShow(@Valid @RequestBody ShowDTO showDTO) {
 		Show savedshow= movieService.createShow(showDTO);
 		return ResponseEntity.status(HttpStatus.CREATED).body(savedshow);
 	}
-	
-	
-	
-	
-	
 
 }

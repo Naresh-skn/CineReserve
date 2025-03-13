@@ -1,0 +1,196 @@
+@startuml
+class com.project.BookMyShow.Service.SeatService {
+- SeatRepository seatRepository
++ String bookMovieSeats(List<Long>)
++ String payment(List<Long>)
+}
+
+
+class com.project.BookMyShow.Controller.SeatBookingController {
+- SeatService seatService
++ String bookSeats(List<Long>)
++ String payment(List<Long>)
+}
+
+
+class com.project.BookMyShow.Entity.Movie {
+- Long movieId
+- String title
+- String genre
+- int duration
+- String language
+- Double rating
+- String description
+- LocalDate releaseDate
+- List<Show> shows
+}
+
+class com.project.BookMyShow.Entity.Address {
+- Long addressId
+- String street
+- String buildingName
+- String city
+- String state
+- String country
+- String pincode
+}
+
+class com.project.BookMyShow.exception.GlobalExceptionHandler {
++ ResponseEntity<ErrorResponse> myNotFoundException(GenException)
+}
+
+class com.project.BookMyShow.DTO.ShowDTO {
+- Long movieId
+- Long theatreId
+- LocalDateTime showTime
+- Double price
+}
+
+interface com.project.BookMyShow.Repository.CityRepository {
+}
+interface com.project.BookMyShow.Repository.TheatreRepository {
+~ Optional<List<Long>> findByCityId(Long)
+~ Theatre findByName(String)
+}
+
+class com.project.BookMyShow.Entity.Show {
+- Long showId
+- Movie movie
+- Theatre theatre
+- LocalDateTime showTime
+- Double price
+- List<Booking> bookings
+}
+
+class com.project.BookMyShow.response.ShowResponse {
+- Long showId
+- Long movieId
+- Long theatreId
+- LocalDateTime showTime
+- Double price
+}
+
+class com.project.BookMyShow.security.SecurityConfiguration {
+~ DataSource datasource
++ SecurityFilterChain defaultSecurityFilterChain(HttpSecurity)
++ UserDetailsService userdetailservice()
++ PasswordEncoder passwordEncoder()
+}
+
+
+class com.project.BookMyShow.DTO.TheatreDTO {
+- String name
+- Long city
+- Integer capacity
+- String Address
+}
+
+interface com.project.BookMyShow.Repository.SeatRepository {
+~ Optional<List<Seat>> findByShowId(Long)
+~ List<Seat> findAvailableSeatsWithLock(List<Long>)
+~ List<Seat> findAvailableSeats(List<Long>)
+}
+
+class com.project.BookMyShow.Controller.MovieController {
+- MovieService movieService
++ ResponseEntity<List<Movie>> getAllMoviesFromCity(Long)
++ ResponseEntity<Map<String,List<Show>>> getAllShowsFromCityAndMovie(Long,Long)
++ ResponseEntity<List<Seat>> getSeatsfromShow(Long)
++ ResponseEntity<Movie> createNewMovie(Movie)
++ ResponseEntity<Theatre> createNewTheatre(TheatreDTO)
++ ResponseEntity<Show> createNewShow(ShowDTO)
+}
+
+
+interface com.project.BookMyShow.Repository.ShowRepository {
+~ Optional<List<Movie>> findByTheatreIds(List<Long>)
+~ Optional<List<Show>> findByTheatreIdsAndMovieId(List<Long>,Long)
+}
+
+class com.project.BookMyShow.exception.ErrorResponse {
+- String message
+- int statusCode
+}
+
+class com.project.BookMyShow.Entity.Theatre {
+- Long theatreId
+- Integer capacity
+- City city
+- String name
+- String address
+- List<Show> shows
+}
+
+class com.project.BookMyShow.BookMyShowApplication {
++ {static} void main(String[])
+}
+
+class com.project.BookMyShow.Entity.Seat {
+- Long seatId
+- Theatre theatre
+- String seatNumber
+- Boolean isBooked
+- LocalDateTime lockedUntil
+- Show show
+}
+
+class com.project.BookMyShow.Service.MovieService {
+- TheatreRepository theatreRepository
+- ShowRepository showRepository
+- SeatRepository seatRepository
+- MovieRepository movieRepository
+- CityRepository cityRepository
++ List<Movie> getAllMovies(Long)
++ Map<String,List<Show>> getAllShows(Long,Long)
++ List<Seat> getAllseats(Long)
++ Movie addNewMovie(Movie)
++ Theatre createTheatre(TheatreDTO)
++ List<Theatre> getthea()
++ Show createShow(ShowDTO)
+}
+
+
+class com.project.BookMyShow.Entity.City {
+- Long cityId
+- String cityName
+- String state
+- String country
+- List<Theatre> theatres
+}
+
+class com.project.BookMyShow.Entity.Booking {
+- Long bookingId
+- User user
+- Show show
+- LocalDateTime bookingTime
+- Double totalPrice
+- String status
+}
+
+interface com.project.BookMyShow.Repository.MovieRepository {
+~ Movie findByTitle(String)
+}
+
+class com.project.BookMyShow.Entity.User {
+- Long userId
+- String name
+- String email
+- String phoneNumber
+- LocalDateTime createdAt
+- LocalDateTime updatedAt
+- List<Booking> bookings
+}
+
+class com.project.BookMyShow.exception.GenException {
+- {static} long serialVersionUID
+}
+
+
+
+org.springframework.data.jpa.repository.JpaRepository <|-- com.project.BookMyShow.Repository.CityRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- com.project.BookMyShow.Repository.TheatreRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- com.project.BookMyShow.Repository.SeatRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- com.project.BookMyShow.Repository.ShowRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- com.project.BookMyShow.Repository.MovieRepository
+com.project.BookMyShow.exception.RuntimeException <|-- com.project.BookMyShow.exception.GenException
+@enduml

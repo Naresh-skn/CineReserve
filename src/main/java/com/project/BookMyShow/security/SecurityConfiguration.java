@@ -31,12 +31,15 @@ public class SecurityConfiguration {
 
 	@Bean
 	public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests((requests) -> 
-					requests.anyRequest().authenticated());
-		http.sessionManagement(session->
-					session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-		http.httpBasic(withDefaults());  
+
+		http.csrf().disable() // Disable CSRF protection
+				.authorizeHttpRequests((requests) ->
+						requests.anyRequest().permitAll())
+				.sessionManagement(session ->
+						session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.httpBasic(withDefaults());
 		return http.build();
+//		return http.build();
 	}
 	
 	@Bean
