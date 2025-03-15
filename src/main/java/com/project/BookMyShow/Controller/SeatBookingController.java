@@ -1,14 +1,12 @@
 package com.project.BookMyShow.Controller;
 
-import java.util.List;
-
-import org.springframework.security.access.prepost.PreAuthorize;
+import com.project.BookMyShow.Service.SeatService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.BookMyShow.Service.SeatService;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")

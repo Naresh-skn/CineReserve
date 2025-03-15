@@ -78,5 +78,30 @@ public class TheatreServiceImpl implements TheatreService{
         return modelMapper.map(theatrefromDb, TheatreDTO.class);
     }
 
+    @Override
+    public List<TheatreDTO> getTheatreFromCity(Long cityId) {
+        City city = cityRepository.findById(cityId)
+                .orElseThrow(()->new GenException("City Not Found"));
+        List<Theatre> theatres = theatreRepository.findByCity_CityId(cityId);
+        return theatres.stream().map(theatre->
+                modelMapper.map(theatre,TheatreDTO.class)
+        ).toList();
+    }
+
+    @Override
+    public TheatreDTO updateTheatre(TheatreDTO theatreDTO) {
+        City city = cityRepository.findById(theatreDTO.getCityId())
+                .orElseThrow(()->new GenException("City Not Found"));
+        Theatre theatre = theatreRepository.findById(theatreDTO.getTheatreId())
+                        .orElseThrow(()->new GenException("Theatre Not Found"));
+
+        theatre.setTheatreName(theatreDTO.getTheatreName());
+        theatre.setAddress(theatreDTO.getAddress());
+        theatre.setCapacity(theatreDTO.getCapacity());
+        theatre.setCity(city);
+        Theatre updatedTheatre = theatreRepository.save(theatre);
+        return modelMapper.map(updatedTheatre,TheatreDTO.class);
+    }
+
 
 }

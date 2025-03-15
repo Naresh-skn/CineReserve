@@ -56,7 +56,16 @@ public class TheatreController {
     }
 
     @GetMapping("/public/theatres")
-    public ResponseEntity<List<CityDTO>> getTheatreFromCity(){
-        return null;
+    public ResponseEntity<List<TheatreDTO>> getTheatreFromCity(@RequestParam Long cityId){
+        List<TheatreDTO> theatreDTOList = theatreService.getTheatreFromCity(cityId);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(theatreDTOList);
+    }
+
+    @PutMapping("/admin/theatre")
+    public ResponseEntity<TheatreDTO> updateTheatre(
+            @RequestBody TheatreDTO theatreDTO
+    ){
+        TheatreDTO updatedTheatreDTO = theatreService.updateTheatre(theatreDTO);
+        return new ResponseEntity<>(updatedTheatreDTO, HttpStatus.CREATED);
     }
 }

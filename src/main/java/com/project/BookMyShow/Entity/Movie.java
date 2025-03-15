@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,14 +34,13 @@ public class Movie {
     private Long movieId;
 
     @Column(name = "title", nullable = false)
-    @NotNull
     private String title;
 
     @Column(name = "genre", nullable = false)
     private String genre;
 
     @Column(name = "duration", nullable = false)
-    private int duration;  // Duration in minutes
+    private int duration;
 
     @Column(name = "language", nullable = false)
     private String language;
@@ -48,13 +48,12 @@ public class Movie {
     @Column(name = "rating")
     private Double rating;
 
-    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "release_date")
     private LocalDate releaseDate;
     
-    @JsonIgnore
-    @OneToMany(mappedBy = "movie")
-    private List<Show> shows = new ArrayList<>();
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "movie")
+//    private List<Show> shows = new ArrayList<>();
 }

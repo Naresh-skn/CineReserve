@@ -22,8 +22,7 @@ public class SeatService {
 	
 	private final SeatRepository seatRepository;
 
-	@Autowired
-	private JavaMailSender mailSender;
+
 	
 	public SeatService(SeatRepository seatRepository) {
 		this.seatRepository = seatRepository;
@@ -56,20 +55,20 @@ public class SeatService {
 	}
 
 	public void sendSimpleEmail(List<Seat> seats) {
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setTo("nnnaresh26@gmail.com");
-		StringBuilder body = new StringBuilder();
-		Seat first = seats.getFirst();
-		Theatre theatre = first.getTheatre();
-		Movie movie = first.getShow().getMovie();
-		Show show = first.getShow();
-		body.append("Theatre Name: ").append(theatre.getTheatreName()).append("\n");
-		body.append("Movie:- ").append(movie.getTitle()).append("\n");
-		body.append("ShowTime:- ").append(show.getShowTime()).append("\n");
-		for (Seat seat: seats){
-			body.append(seat.getSeatId()).append(" \n");
-		}
-		System.out.println(body);
+//		SimpleMailMessage message = new SimpleMailMessage();
+//		message.setTo("nnnaresh26@gmail.com");
+//		StringBuilder body = new StringBuilder();
+//		Seat first = seats.getFirst();
+//		Theatre theatre = first.getTheatre();
+//		Movie movie = first.getShow().getMovie();
+//		Show show = first.getShow();
+//		body.append("Theatre Name: ").append(theatre.getTheatreName()).append("\n");
+//		body.append("Movie:- ").append(movie.getTitle()).append("\n");
+//		body.append("ShowTime:- ").append(show.getShowTime()).append("\n");
+//		for (Seat seat: seats){
+//			body.append(seat.getSeatId()).append(" \n");
+//		}
+//		System.out.println(body);
 //		message.setSubject("Testing mail");
 //		message.setText("Hello, How are you");
 //		message.setFrom("person.notknown.oo1@gmail.com"); // Optional, but recommended

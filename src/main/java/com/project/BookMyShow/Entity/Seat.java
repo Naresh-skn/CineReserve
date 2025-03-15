@@ -23,10 +23,10 @@ public class Seat {
     @Column(name = "seat_id")
     private Long seatId;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "theatre_id", nullable = false)
-    private Theatre theatre;
+//    @JsonIgnore
+//    @ManyToOne
+//    @JoinColumn(name = "theatre_id", nullable = false)
+//    private Theatre theatre;
 
     @Column(name = "seat_number", nullable = false)
     private String seatNumber;
