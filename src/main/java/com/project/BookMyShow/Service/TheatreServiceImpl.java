@@ -3,6 +3,7 @@ package com.project.BookMyShow.Service;
 import com.project.BookMyShow.DTO.CityDTO;
 import com.project.BookMyShow.DTO.TheatreDTO;
 import com.project.BookMyShow.Entity.City;
+import com.project.BookMyShow.Entity.SeatTypeConfiguration;
 import com.project.BookMyShow.Entity.Theatre;
 import com.project.BookMyShow.Repository.CityRepository;
 import com.project.BookMyShow.Repository.TheatreRepository;
@@ -11,8 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TheatreServiceImpl implements TheatreService{
@@ -73,9 +74,15 @@ public class TheatreServiceImpl implements TheatreService{
                 .orElseThrow(()->new GenException("City Not Found"));
 
         Theatre theatre = modelMapper.map(theatreDTO, Theatre.class);
-        Theatre theatrefromDb = theatreRepository.save(theatre);
 
-        return modelMapper.map(theatrefromDb, TheatreDTO.class);
+        List<SeatTypeConfiguration> seatConfigurations = theatreDTO.getSeatConfigurations().
+                stream()
+                .map(dto -> new SeatTypeConfiguration(dto.getSeatType(), dto.getSeatCount(), dto.getPrice(), theatre))
+                .toList();
+        theatre.setSeatConfigurations(seatConfigurations);
+
+        Theatre theatreFromDb = theatreRepository.save(theatre);
+        return modelMapper.map(theatreFromDb, TheatreDTO.class);
     }
 
     @Override
@@ -99,7 +106,21 @@ public class TheatreServiceImpl implements TheatreService{
         theatre.setAddress(theatreDTO.getAddress());
         theatre.setCapacity(theatreDTO.getCapacity());
         theatre.setCity(city);
+
+        theatre.getSeatConfigurations().clear();
+
+        theatreDTO.getSeatConfigurations().forEach(seatDTO -> {
+            SeatTypeConfiguration newConfig = new SeatTypeConfiguration(
+                    seatDTO.getSeatType(),
+                    seatDTO.getSeatCount(),
+                    seatDTO.getPrice(),
+                    theatre
+            );
+            theatre.getSeatConfigurations().add(newConfig);
+        });
+
         Theatre updatedTheatre = theatreRepository.save(theatre);
+
         return modelMapper.map(updatedTheatre,TheatreDTO.class);
     }
 

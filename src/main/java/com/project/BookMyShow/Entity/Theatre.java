@@ -1,18 +1,12 @@
 package com.project.BookMyShow.Entity;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -51,5 +45,11 @@ public class Theatre {
     @JsonIgnore
     @OneToMany(mappedBy = "theatre")
     @ToString.Exclude
-    private List<Show> shows;
+    private List<Show> shows = new ArrayList<>();
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "theatre", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SeatTypeConfiguration> seatConfigurations = new ArrayList<>();
+
+
 }

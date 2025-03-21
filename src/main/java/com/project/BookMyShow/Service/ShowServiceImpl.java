@@ -1,13 +1,11 @@
 package com.project.BookMyShow.Service;
 
+import com.project.BookMyShow.DTO.ResponseShowDTO;
 import com.project.BookMyShow.DTO.ShowDTO;
-import com.project.BookMyShow.Entity.Movie;
-import com.project.BookMyShow.Entity.Seat;
-import com.project.BookMyShow.Entity.Show;
-import com.project.BookMyShow.Entity.Theatre;
+import com.project.BookMyShow.Entity.*;
 import com.project.BookMyShow.Repository.MovieRepository;
-import com.project.BookMyShow.Repository.SeatRepository;
 import com.project.BookMyShow.Repository.ShowRepository;
+import com.project.BookMyShow.Repository.ShowSeatRepository;
 import com.project.BookMyShow.Repository.TheatreRepository;
 import com.project.BookMyShow.exception.GenException;
 import jakarta.transaction.Transactional;
@@ -27,30 +25,47 @@ public class ShowServiceImpl implements ShowService{
     private final TheatreRepository theatreRepository;
     private final MovieRepository movieRepository;
     private final ModelMapper modelMapper;
-    private final SeatRepository seatRepository;
+    private final ShowSeatRepository showSeatRepository;
 
     @Override
     @Transactional
     public ShowDTO addNewShow(ShowDTO showDTO) {
+
         Movie movie = movieRepository.findById(showDTO.getMovieId())
                 .orElseThrow(()->new GenException("No Movie Found"));
         Theatre theatre = theatreRepository.findById(showDTO.getTheatreId())
                 .orElseThrow(()->new GenException("No Theatre Found"));
         Show show = modelMapper.map(showDTO,Show.class);
 
-        List<Seat> seats = new ArrayList<>();
-        for(int i=0;i<theatre.getCapacity();i++){
-            Seat seat = new Seat();
-            seat.setShow(show);
-            seat.setIsBooked(false);
-            seat.setSeatNumber("s"+i);
-            seats.add(seat);
+        List<ShowSeat> showSeats = new ArrayList<>();
+        for(SeatTypeConfiguration seatTypeConfiguration: theatre.getSeatConfigurations()){
+            for (int i=1;i<=seatTypeConfiguration.getSeatCount();i++) {
+                ShowSeat showSeat = new ShowSeat();
+                showSeat.setShow(show);
+                showSeat.setSeatNumber("seat:" + i);
+                showSeat.setSeatType(seatTypeConfiguration.getSeatType());
+                showSeat.setPrice(seatTypeConfiguration.getPrice());
+                showSeats.add(showSeat);
+            }
         }
         show.setMovie(movie);
-        show.setSeats(seats);
+        show.setSeats(showSeats);
         show.setTheatre(theatre);
         Show savedShow = showRepository.save(show);
-        seatRepository.saveAll(seats);
+//        seatRepository.saveAll(showSeats);
         return modelMapper.map(savedShow,ShowDTO.class);
+    }
+
+
+    @Override
+    public List<ResponseShowDTO> getAllShowsFromCityAndMovie(Long cityId, Long movieId) {
+
+        List<Show> shows = showRepository.findShowsByMovieAndCity(movieId,cityId);
+        if(shows.isEmpty())
+            throw new GenException("No Shows found for this Movie");
+
+        return shows.stream().map(
+                show -> modelMapper.map(show,ResponseShowDTO.class)
+        ).toList();
     }
 }

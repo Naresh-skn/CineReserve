@@ -1,28 +1,19 @@
 package com.project.BookMyShow.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import com.project.BookMyShow.DTO.MovieDTO;
-import com.project.BookMyShow.Entity.*;
+import com.project.BookMyShow.DTO.ShowDTO;
+import com.project.BookMyShow.Entity.City;
+import com.project.BookMyShow.Entity.Movie;
+import com.project.BookMyShow.Entity.Show;
+import com.project.BookMyShow.Entity.Theatre;
+import com.project.BookMyShow.Repository.*;
+import com.project.BookMyShow.exception.GenException;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.project.BookMyShow.DTO.ShowDTO;
-import com.project.BookMyShow.Repository.CityRepository;
-import com.project.BookMyShow.Repository.MovieRepository;
-import com.project.BookMyShow.Repository.SeatRepository;
-import com.project.BookMyShow.Repository.ShowRepository;
-import com.project.BookMyShow.Repository.TheatreRepository;
-import com.project.BookMyShow.exception.GenException;
-
-import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
+import java.util.*;
 
 @Service
 public class MovieServiceImpl implements MovieService {
@@ -30,7 +21,6 @@ public class MovieServiceImpl implements MovieService {
 	
 	private final TheatreRepository theatreRepository;
 	private final ShowRepository showRepository;
-	private final SeatRepository seatRepository;
 	private final MovieRepository movieRepository;
 
 	@Autowired
@@ -40,11 +30,9 @@ public class MovieServiceImpl implements MovieService {
 	private CityRepository cityRepository;
 
 
-	public MovieServiceImpl(TheatreRepository theatreRepository, ShowRepository showRepository,
-							SeatRepository seatRepository, MovieRepository movieRepository) {
+	public MovieServiceImpl(TheatreRepository theatreRepository, ShowRepository showRepository, MovieRepository movieRepository) {
 		this.theatreRepository = theatreRepository;
 		this.showRepository = showRepository;
-		this.seatRepository = seatRepository;
 		this.movieRepository = movieRepository;
 	}
 
@@ -94,13 +82,13 @@ public class MovieServiceImpl implements MovieService {
 		return map;
 	}
 
-	public List<Seat> getAllseats(Long showId) {
-		Optional<List<Seat>> seats = seatRepository.findByShowId(showId);
-		if(seats.get().size()==0)
-			throw new GenException("No Seats found");
-		return seats.get();		
-		
-	}
+//	public List<Seat> getAllseats(Long showId) {
+//		Optional<List<Seat>> seats = seatRepository.findByShowId(showId);
+//		if(seats.get().size()==0);
+//		throw new GenException("No Seats found");
+//		return seats.get();
+//
+//	}
 
 	public MovieDTO addNewMovie(@Valid MovieDTO movieDTO) {
 		Movie movie = modelMapper.map(movieDTO, Movie.class);
@@ -128,30 +116,7 @@ public class MovieServiceImpl implements MovieService {
 				.toList();
 	}
 
-	@Override
-	public List<ShowDTO> getAllShowsFromCityAndMovie(Long cityId, Long movieId) {
 
-		List<Show> shows = showRepository.findShowsByMovieAndCity(movieId,cityId);
-		if(shows.isEmpty())
-			throw new GenException("No Shows found for this Movie");
-
-		Map<Theatre,List<Show>> map = new HashMap<>();
-
-//		for(Show eachShow: shows) {
-//			String theatreName = eachShow.getTheatre().getTheatreName();
-//			if(map.containsKey(theatreName)) {
-//				List<Show> show = map.get(theatreName);
-//				show.add(eachShow);
-//				map.put(theatreName, show);
-//			}
-//			else
-//				map.put(theatreName, new ArrayList<>());
-//
-//		}
-		return shows.stream().map(
-				show -> modelMapper.map(show,ShowDTO.class)
-		).toList();
-	}
 
 
 	public List<Theatre> getthea() {
@@ -160,34 +125,34 @@ public class MovieServiceImpl implements MovieService {
 	}
 
 
-	@Transactional
-	public Show createShow(@Valid ShowDTO showDTO) {
-Optional<Theatre> theatre = theatreRepository.findById(showDTO.getTheatreId());
-	
-Optional<Movie> movie = movieRepository.findById(showDTO.getMovieId());
-		
-		Show show= Show.builder()
-				.movie(movie.get())
-				.price(showDTO.getPrice())
-				.theatre(theatre.get())
-				.showTime(showDTO.getShowTime())
-				.build();
-		List<Seat> seats = new ArrayList<>();
-		for(int i=0;i<theatre.get().getCapacity();i++) {
-			Seat seat = Seat.builder()
-					//.theatre(theatre.get())
-					.seatNumber("s"+i)
-					.show(show)
-					.isBooked(Boolean.FALSE)
-					.build();
-			seats.add(seat);
-			
-		}
-		Show Savedshow= showRepository.save(show);		
-		List<Seat> savedSeats = seatRepository.saveAll(seats);
-		System.out.println(savedSeats);
-		return Savedshow;
-	}
+//	@Transactional
+//	public Show createShow(@Valid ShowDTO showDTO) {
+//Optional<Theatre> theatre = theatreRepository.findById(showDTO.getTheatreId());
+//
+//Optional<Movie> movie = movieRepository.findById(showDTO.getMovieId());
+//
+//		Show show= Show.builder()
+//				.movie(movie.get())
+//				.price(showDTO.getPrice())
+//				.theatre(theatre.get())
+//				.showTime(showDTO.getShowTime())
+//				.build();
+//		List<Seat> seats = new ArrayList<>();
+//		for(int i=0;i<theatre.get().getCapacity();i++) {
+//			Seat seat = Seat.builder()
+//					//.theatre(theatre.get())
+//					.seatNumber("s"+i)
+//					.show(show)
+//					.isBooked(Boolean.FALSE)
+//					.build();
+//			seats.add(seat);
+//
+//		}
+//		Show Savedshow= showRepository.save(show);
+//		List<Seat> savedSeats = seatRepository.saveAll(seats);
+//		System.out.println(savedSeats);
+//		return Savedshow;
+//	}
 	
 	
 

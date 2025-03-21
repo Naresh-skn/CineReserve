@@ -41,13 +41,12 @@ public class Show {
     @Column(name = "show_time", nullable = false)
     private LocalDateTime showTime;
 
-    @Column(name = "price", nullable = false)
-    private Double price;
 
     @JsonIgnore
     @OneToMany(mappedBy = "show",cascade = CascadeType.ALL)
     @ToString.Exclude
-    private List<Seat> seats = new ArrayList<>();
+    private List<ShowSeat> seats = new ArrayList<>();
+
 //    @JsonIgnore
 //    @OneToMany(mappedBy = "show")
 //    @ToString.Exclude
