@@ -43,15 +43,6 @@ public class MovieController {
 	}
 	
 
-//
-//
-//	@GetMapping("seats/{showId}")
-//	public ResponseEntity<List<Seat>> getSeatsFromShow(@PathVariable("showId") Long showId){
-//		List<Seat> seats = movieService.getAllseats(showId);
-//		return ResponseEntity.status(HttpStatus.OK).body(seats);
-//	}
-//
-	
 
 
 	

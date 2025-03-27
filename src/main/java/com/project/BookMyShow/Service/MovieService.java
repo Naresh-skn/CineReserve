@@ -13,10 +13,6 @@ public interface MovieService {
 
     Map<String, List<Show>> getAllShows(Long cityId, Long movieId);
 
-//    List<Seat> getAllseats(Long showId);
-
-//    Show createShow(@Valid ShowDTO showDTO);
-
     MovieDTO addNewMovie(@Valid MovieDTO movieDTO);
 
     List<MovieDTO> getAllMoviesFromCity(Long cityId);

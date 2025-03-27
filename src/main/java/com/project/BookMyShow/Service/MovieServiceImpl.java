@@ -1,12 +1,14 @@
 package com.project.BookMyShow.Service;
 
 import com.project.BookMyShow.DTO.MovieDTO;
-import com.project.BookMyShow.DTO.ShowDTO;
 import com.project.BookMyShow.Entity.City;
 import com.project.BookMyShow.Entity.Movie;
 import com.project.BookMyShow.Entity.Show;
 import com.project.BookMyShow.Entity.Theatre;
-import com.project.BookMyShow.Repository.*;
+import com.project.BookMyShow.Repository.CityRepository;
+import com.project.BookMyShow.Repository.MovieRepository;
+import com.project.BookMyShow.Repository.ShowRepository;
+import com.project.BookMyShow.Repository.TheatreRepository;
 import com.project.BookMyShow.exception.GenException;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
@@ -82,13 +84,6 @@ public class MovieServiceImpl implements MovieService {
 		return map;
 	}
 
-//	public List<Seat> getAllseats(Long showId) {
-//		Optional<List<Seat>> seats = seatRepository.findByShowId(showId);
-//		if(seats.get().size()==0);
-//		throw new GenException("No Seats found");
-//		return seats.get();
-//
-//	}
 
 	public MovieDTO addNewMovie(@Valid MovieDTO movieDTO) {
 		Movie movie = modelMapper.map(movieDTO, Movie.class);

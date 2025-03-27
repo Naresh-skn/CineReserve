@@ -3,6 +3,7 @@ package com.project.BookMyShow.Controller;
 
 import com.project.BookMyShow.DTO.ResponseShowDTO;
 import com.project.BookMyShow.DTO.ShowDTO;
+import com.project.BookMyShow.DTO.ShowSeatDTO;
 import com.project.BookMyShow.Service.ShowService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class ShowController {
-
 
 
     private final ShowService showService;
@@ -37,6 +37,15 @@ public class ShowController {
 		List<ResponseShowDTO> shows = showService.getAllShowsFromCityAndMovie(cityId,movieId);
 		return ResponseEntity.status(HttpStatus.OK).body(shows);//<>(shows,HttpStatus.OK);
 	}
+
+
+	@GetMapping("seats/{showId}")
+	public ResponseEntity<List<ShowSeatDTO>> getSeatsFromShow(@PathVariable("showId") Long showId){
+		List<ShowSeatDTO> seats = showService.getAllSeats(showId);
+		return ResponseEntity.status(HttpStatus.OK).body(seats);
+	}
+
+
 
 //    @GetMapping("/public/cities")
 //    public ResponseEntity<List<CityDTO>> getAllCities(){

@@ -2,6 +2,7 @@ package com.project.BookMyShow.Service;
 
 import com.project.BookMyShow.DTO.ResponseShowDTO;
 import com.project.BookMyShow.DTO.ShowDTO;
+import com.project.BookMyShow.DTO.ShowSeatDTO;
 import com.project.BookMyShow.Entity.*;
 import com.project.BookMyShow.Repository.MovieRepository;
 import com.project.BookMyShow.Repository.ShowRepository;
@@ -68,4 +69,22 @@ public class ShowServiceImpl implements ShowService{
                 show -> modelMapper.map(show,ResponseShowDTO.class)
         ).toList();
     }
+
+    @Override
+    public List<ShowSeatDTO> getAllSeats(Long showId) {
+        List<ShowSeat> seats = showSeatRepository.findByShow_ShowId(showId);
+		if(seats.isEmpty())
+		    throw new GenException("No Seats found");
+        return seats.stream().map(showSeat ->
+                modelMapper.map(showSeat,ShowSeatDTO.class)).toList();
+    }
+
+
+//	public List<Seat> getAllseats(Long showId) {
+//		Optional<List<Seat>> seats = seatRepository.findByShowId(showId);
+//		if(seats.get().size()==0);
+//		throw new GenException("No Seats found");
+//		return seats.get();
+//
+//	}
 }

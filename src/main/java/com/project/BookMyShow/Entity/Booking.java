@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "bookings")
@@ -29,12 +31,15 @@ public class Booking {
     @JoinColumn(name = "show_id", nullable = false)
     private Show show;
 
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ShowSeat> seats = new HashSet<>();
+
     @Column(name = "booking_time", nullable = false)
     private LocalDateTime bookingTime;
 
     @Column(name = "total_price", nullable = false)
     private Double totalPrice;
 
-    @Column(name = "status", nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private BookingStatus bookingStatus;
 }

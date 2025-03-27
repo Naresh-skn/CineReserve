@@ -24,22 +24,17 @@ public class ShowSeat {
 
     private LocalDateTime lockUntil;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "theater_seat_id")
-//    @JsonIgnore
-//    private TheaterSeat t;
-
     @Enumerated(EnumType.STRING)
     private SeatType seatType;
 
     @Enumerated(EnumType.STRING)
-    private BookingStatus status = BookingStatus.UNRESERVED;
+    private BookingStatus bookingStatus = BookingStatus.UNRESERVED;
 
     private Double price;
 
-//    @ManyToOne(cascade = CascadeType.MERGE)
-//    @JoinColumn(name = "booking_id")
-//    private Booking booking;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "booking_id")
+    private Booking booking;
 
 
 }
