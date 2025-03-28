@@ -44,12 +44,4 @@ public class ShowController {
 		List<ShowSeatDTO> seats = showService.getAllSeats(showId);
 		return ResponseEntity.status(HttpStatus.OK).body(seats);
 	}
-
-
-
-//    @GetMapping("/public/cities")
-//    public ResponseEntity<List<CityDTO>> getAllCities(){
-//
-//
-//    }
 }

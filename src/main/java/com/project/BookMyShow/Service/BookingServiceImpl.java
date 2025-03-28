@@ -11,11 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -34,20 +33,22 @@ public class BookingServiceImpl implements  BookingService{
     public String bookSeats(BookingRequestDTO bookingRequestDTO) {
         User user = userRepository.findById(1L)
                 .orElseThrow(()->new GenException("No user Found"));
-        List<ShowSeat> availableSeats = showSeatRepository
-                .findAvailableSeats(bookingRequestDTO.getSeatIds());
         Show show = showRepository.findById(bookingRequestDTO.getShowId())
                 .orElseThrow(()->new GenException("Show Not Found"));
+        List<ShowSeat> availableSeats = showSeatRepository
+                .findAvailableSeats(bookingRequestDTO.getSeatIds());
+
 
         if(availableSeats.size()!=bookingRequestDTO.getSeatIds().size())
             throw new GenException("Seats Not available");
 
         Double totalPrice = 0D;
 
-        Instant lockExpiration = Instant.now().plus(5, ChronoUnit.MINUTES);
+        LocalDateTime localDateTime = LocalDateTime.now().plusMinutes(5);
         for(ShowSeat showSeat : availableSeats){
-            showSeat.setLockUntil(LocalDateTime.from(lockExpiration));
+            showSeat.setLockUntil(localDateTime);
             totalPrice+=showSeat.getPrice();
+            showSeat.setBookingStatus(BookingStatus.RESERVED_PAYMENT_PENDING);
         }
         showSeatRepository.saveAll(availableSeats);
 
@@ -64,4 +65,41 @@ public class BookingServiceImpl implements  BookingService{
         return "Seats locked successfully! Complete payment within 5 minutes.";
 
     }
+
+    @Override
+    @Transactional
+    public String confirmBooking(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(()->new GenException("No Booking Found"));
+        Set<ShowSeat> seats = booking.getSeats();
+        for(ShowSeat showSeat : seats){
+            showSeat.setLockUntil(null);
+            showSeat.setBookingStatus(BookingStatus.CONFIRMED);
+        }
+        showSeatRepository.saveAll(seats);
+        booking.setBookingStatus(BookingStatus.CONFIRMED);
+        bookingRepository.save(booking);
+        return "Ticket Confirmed";
+    }
+
+    @Override
+    public String cancelBooking(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(()->new GenException("No Booking Found"));
+
+        if(!booking.getBookingStatus().equals(BookingStatus.RESERVED_PAYMENT_PENDING))
+            throw new GenException("Booking can not cancelled");
+
+        Set<ShowSeat> seats = booking.getSeats();
+        for(ShowSeat showSeat : seats){
+            showSeat.setLockUntil(null);
+            showSeat.setBookingStatus(BookingStatus.UNRESERVED);
+        }
+        showSeatRepository.saveAll(seats);
+        booking.setBookingStatus(BookingStatus.FAILED);
+        bookingRepository.save(booking);
+        return "Booking Failed";
+    }
+
+
 }

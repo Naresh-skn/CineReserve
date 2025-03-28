@@ -12,9 +12,7 @@ import com.project.BookMyShow.Entity.Show;
 import org.springframework.data.repository.query.Param;
 
 public interface ShowRepository extends JpaRepository<Show, Long>{
-	
-//	@Query("Select Distinct s.movie from Show s where s.theatre.theatreId IN :theatreIds")
-//	List<Movie> findByTheatre(List<Long> theatreIds);
+
 
 	@Query("SELECT s FROM Show s WHERE s.theatre.theatreId IN :theatreIds and s.movie.movieId =:movie")
 	Optional<List<Show>> findByTheatreIdsAndMovieId(List<Long> theatreIds, Long movie);

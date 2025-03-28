@@ -39,18 +39,6 @@ public class MovieServiceImpl implements MovieService {
 	}
 
 
-	public List<MovieDTO> getAllMovies(Long cityId) {
-//		Optional<List<Long>> theatres = null;//theatreRepository.findByCityId(cityId);
-//		if(theatres.isEmpty())
-//			throw new GenException("No Theatres found in your City");
-//		List<Long> theatreList = theatres.get();
-//		Optional<List<Movie>> movies = showRepository.findByTheatreIds(theatreList);
-//		if(movies.get().size()==0)
-//			throw new GenException("No Movies found in your City");
-		return null;
-	}
-
-
 	@Override
 	public List<MovieDTO> getAllMovies() {
 		List<Movie> movies = movieRepository.findAll();
@@ -119,36 +107,5 @@ public class MovieServiceImpl implements MovieService {
 		return theatreRepository.findAll();
 	}
 
-
-//	@Transactional
-//	public Show createShow(@Valid ShowDTO showDTO) {
-//Optional<Theatre> theatre = theatreRepository.findById(showDTO.getTheatreId());
-//
-//Optional<Movie> movie = movieRepository.findById(showDTO.getMovieId());
-//
-//		Show show= Show.builder()
-//				.movie(movie.get())
-//				.price(showDTO.getPrice())
-//				.theatre(theatre.get())
-//				.showTime(showDTO.getShowTime())
-//				.build();
-//		List<Seat> seats = new ArrayList<>();
-//		for(int i=0;i<theatre.get().getCapacity();i++) {
-//			Seat seat = Seat.builder()
-//					//.theatre(theatre.get())
-//					.seatNumber("s"+i)
-//					.show(show)
-//					.isBooked(Boolean.FALSE)
-//					.build();
-//			seats.add(seat);
-//
-//		}
-//		Show Savedshow= showRepository.save(show);
-//		List<Seat> savedSeats = seatRepository.saveAll(seats);
-//		System.out.println(savedSeats);
-//		return Savedshow;
-//	}
-	
-	
 
 }

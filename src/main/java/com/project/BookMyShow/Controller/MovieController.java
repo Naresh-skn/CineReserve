@@ -1,7 +1,6 @@
 package com.project.BookMyShow.Controller;
 
 import com.project.BookMyShow.DTO.MovieDTO;
-import com.project.BookMyShow.DTO.ShowDTO;
 import com.project.BookMyShow.Service.MovieService;
 import com.project.BookMyShow.Service.MovieServiceImpl;
 import jakarta.validation.Valid;
@@ -41,22 +40,5 @@ public class MovieController {
 		List<MovieDTO> MoviesDTO = movieService.getAllMovies();
 		return ResponseEntity.status(HttpStatus.CREATED).body(MoviesDTO);
 	}
-	
-
-
-
-	
-//	@PostMapping("test/admin/theatre")
-//	@PreAuthorize("hasRole('ADMIN')")
-//	public ResponseEntity<Theatre> createNewTheatre(@Valid @RequestBody TheatreDTO theatredto) {
-//		Theatre savedTheatre= movieService.createTheatre(theatredto);
-//		return ResponseEntity.status(HttpStatus.CREATED).body(savedTheatre);
-//	}
-	
-//	@PostMapping("admin/show")
-//	public ResponseEntity<Show> createNewShow(@Valid @RequestBody ShowDTO showDTO) {
-//		Show savedshow= movieService.createShow(showDTO);
-//		return ResponseEntity.status(HttpStatus.CREATED).body(savedshow);
-//	}
 
 }

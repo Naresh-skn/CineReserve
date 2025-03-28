@@ -79,12 +79,4 @@ public class ShowServiceImpl implements ShowService{
                 modelMapper.map(showSeat,ShowSeatDTO.class)).toList();
     }
 
-
-//	public List<Seat> getAllseats(Long showId) {
-//		Optional<List<Seat>> seats = seatRepository.findByShowId(showId);
-//		if(seats.get().size()==0);
-//		throw new GenException("No Seats found");
-//		return seats.get();
-//
-//	}
 }

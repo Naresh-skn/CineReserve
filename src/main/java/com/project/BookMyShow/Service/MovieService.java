@@ -1,7 +1,6 @@
 package com.project.BookMyShow.Service;
 
 import com.project.BookMyShow.DTO.MovieDTO;
-import com.project.BookMyShow.DTO.ShowDTO;
 import com.project.BookMyShow.Entity.Show;
 import jakarta.validation.Valid;
 

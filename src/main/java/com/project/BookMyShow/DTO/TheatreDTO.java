@@ -1,6 +1,5 @@
 package com.project.BookMyShow.DTO;
 
-import com.project.BookMyShow.Entity.SeatTypeConfiguration;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

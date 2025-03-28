@@ -12,7 +12,6 @@ public class ErrorResponse {
         this.statusCode = statusCode;
     }
 
-    // Getters and setters
 }
 
 
