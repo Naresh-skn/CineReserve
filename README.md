@@ -8,3 +8,6 @@ Users can:
     Select and book seats in real-time.
     Make payments for tickets.
     It also supports high concurrency seat booking with pessimistic locking to prevent race conditions. Theatre admins can manage shows and view booking reports.
+
+
+![alt text](image.png)
